@@ -8,10 +8,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AuthenticationController extends AbstractController
 {
-    #[Route('/', name: 'app_authentication')]
+    #[Route('/', name: 'adminLogin')]
     public function adminLogin(): Response
     {
         return $this->render('authentication/login.html.twig', [
+        ]);
+    }
+    #[Route('/register', name: 'adminRegister')]
+    public function adminRegister(): Response
+    {
+        return $this->render('authentication/register.html.twig', [
         ]);
     }
 }
