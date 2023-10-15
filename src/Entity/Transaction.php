@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TransactionRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
@@ -28,7 +29,7 @@ class Transaction
     private ?float $fees = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $makedAt = null;
+    private ?DateTimeImmutable $makedAt = null;
 
     public function getId(): ?int
     {
@@ -83,12 +84,12 @@ class Transaction
         return $this;
     }
 
-    public function getMakedAt(): ?\DateTimeImmutable
+    public function getMakedAt(): ?DateTimeImmutable
     {
         return $this->makedAt;
     }
 
-    public function setMakedAt(\DateTimeImmutable $makedAt): static
+    public function setMakedAt(DateTimeImmutable $makedAt): static
     {
         $this->makedAt = $makedAt;
 

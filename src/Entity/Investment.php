@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\InvestmentRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InvestmentRepository::class)]
@@ -26,10 +27,10 @@ class Investment
     private ?string $type = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $makedAt = null;
+    private ?DateTimeImmutable $makedAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $availableAt = null;
+    private ?DateTimeImmutable $availableAt = null;
 
     #[ORM\Column]
     private ?int $return = null;
@@ -88,24 +89,24 @@ class Investment
         return $this;
     }
 
-    public function getMakedAt(): ?\DateTimeImmutable
+    public function getMakedAt(): ?DateTimeImmutable
     {
         return $this->makedAt;
     }
 
-    public function setMakedAt(\DateTimeImmutable $makedAt): static
+    public function setMakedAt(DateTimeImmutable $makedAt): static
     {
         $this->makedAt = $makedAt;
 
         return $this;
     }
 
-    public function getAvailableAt(): ?\DateTimeImmutable
+    public function getAvailableAt(): ?DateTimeImmutable
     {
         return $this->availableAt;
     }
 
-    public function setAvailableAt(\DateTimeImmutable $availableAt): static
+    public function setAvailableAt(DateTimeImmutable $availableAt): static
     {
         $this->availableAt = $availableAt;
 

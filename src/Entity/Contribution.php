@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ContributionRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContributionRepository::class)]
@@ -21,7 +22,7 @@ class Contribution
     private ?int $amount = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $makedAt = null;
+    private ?DateTimeImmutable $makedAt = null;
 
     public function getId(): ?int
     {
@@ -52,12 +53,12 @@ class Contribution
         return $this;
     }
 
-    public function getMakedAt(): ?\DateTimeImmutable
+    public function getMakedAt(): ?DateTimeImmutable
     {
         return $this->makedAt;
     }
 
-    public function setMakedAt(\DateTimeImmutable $makedAt): static
+    public function setMakedAt(DateTimeImmutable $makedAt): static
     {
         $this->makedAt = $makedAt;
 
