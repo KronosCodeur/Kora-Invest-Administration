@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Kora Invest Admin{% endblock %}</title>
+    <link rel="icon" href="{{ asset('pictures/assets/auth.jpg') }}">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    {% endblock %}
+</head>
+<style>
+    .brand:hover{
+        color: #ff6219;
+    }
+    .link{
+        color: #ff6219;
+        font-size: 20px;
+    }
+    .icon{
+        color: #ff6219;
+        font-size: 20px;
+    }
+    *{
+        font-family: Poppins,sans-serif;
+    }
+
+</style>
+<body class="flex-row d-flex ">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark " style="max-width: 280px; min-height: 100vh">
+    <a href="{{ path('home.index') }}" class= "text-white text-decoration-none  "  style="font-size: 50px">
+        <span class="fs-1  brand">Kora Invest </span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="{{ path('home.index') }}"  onclick="" class="nav-link  text-white link" aria-current="page">
+                <i class="fa fa-home icon"></i>
+                Home
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('clients.index') }}" class="nav-link text-white link">
+                <i class="fa fa-users icon"></i>
+                Clients
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white link">
+                <i class="fa-solid fa-gears" style="color: #ff6219"></i>
+                Settings
+            </a>
+        </li>
+    </ul>
+</div>
+    <div class="d-flex flex-column justify-content-center " style="min-width: calc(100% - 250px); height: 100vh">
+        <nav class="p-3 border-bottom " style="height: 80px; width: 100%">
+            <div class="flex-row d-flex justify-content-between align-items-center" >
+                <div class="col-8 px-4">
+                    <form class="w-100 me-3 " role="search">
+                        <input type="search" class="form-control w-100" placeholder="Search..." aria-label="Search">
+                    </form>
+                </div>
+                <div class="col-4 px-2 gap-2 d-flex flex-row align-items-center justify-content-end">
+                    <img src="{{ app.user.picture }}" alt="" width="50" height="50" class="rounded-circle me-2">
+                    <div class="flex-column d-flex justify-content-center align-items-start ">
+                        <span class="text-black">{{ app.user.userIdentifier }}</span>
+                        <span class="text-black text-opacity-75">{{ app.user.firstName }} {{ app.user.lastName }}</span>
+                    </div>
+                    <a class="border-0 py-1 px-3 text-white bg-danger rounded-2 text-decoration-none" href="{{ path('security.logout') }}"><i class="fa-solid fa-right-from-bracket"></i></a>
+                </div>
+            </div>
+        </nav>
+        <div class="bg-body-secondary  m-0 w-100" style="width: 100%; min-height: calc(100vh - 80px)">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
