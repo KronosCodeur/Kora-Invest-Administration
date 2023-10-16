@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Kora Invest Admin{% endblock %}</title>
+    <title>Kora Invest Admin - {% block title %}{% endblock %}</title>
     <link rel="icon" href="{{ asset('pictures/assets/auth.jpg') }}">
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
@@ -19,26 +19,7 @@
 </head>
 {% block style %}
     <style>
-        .brand:hover{
-            color: #ff6219;
-        }
-        .link{
-            color: #ff6219;
-            font-size: 20px;
-        }
-        .icon{
-            color: #ff6219;
-            font-size: 20px;
-        }
-        .primaryBgColor{
-            background-color: #ff6219;
-        }
-        .primaryTextColor{
-            color: #ff6219;
-        }
-        *{
-            font-family: Poppins,sans-serif;
-        }
+
     </style>
 {% endblock %}
 
@@ -48,7 +29,7 @@
         <span class="fs-1  brand">Kora Invest </span>
     </a>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column mb-2">
         <li class="nav-item">
             <a href="{{ path('home.index') }}"  onclick="" class="nav-link  text-white link" aria-current="page">
                 <i class="fa fa-home icon"></i>
@@ -61,15 +42,18 @@
                 Clients
             </a>
         </li>
+    </ul>
+    <hr style="color: white; height: 2px;width: 100%">
+    <ul class="nav nav-pills flex-column mb-auto">
         <li>
-            <a href="{{ path('security.register') }}" class="nav-link text-white link">
-                <i class="fa fa-user-plus icon"></i>
-                Add Client
+            <a href="{{ path('security.adminRegister') }}" class="nav-link text-white link">
+                <i class="fa fa-user-graduate icon"></i>
+                Administrators
             </a>
         </li>
         <li>
-            <a href="#" class="nav-link text-white link">
-                <i class="fa-solid fa-gears" style="color: #ff6219"></i>
+            <a href="{{ path('settings.index') }}" class="nav-link text-white link">
+                <i class="fa-solid fa-gears "></i>
                 Settings
             </a>
         </li>
