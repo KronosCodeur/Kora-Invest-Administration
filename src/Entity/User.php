@@ -3,10 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Cassandra\Date;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,11 +31,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     /**
-     * @var string The hashed password
+     * @var ?string The hashed password
      */
     #[ORM\Column]
-    #[Assert\NotBlank]
-    private string $password ;
+    private ?string $password ;
 
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
@@ -329,12 +326,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRegisteredAt(): string
     {
-        return $this->registredAt;
+        return $this->registeredAt;
     }
 
-    public function setRegisteredAt(string $registredAt): static
+    public function setRegisteredAt(string $registeredAt): static
     {
-        $this->registredAt = $registredAt;
+        $this->registeredAt = $registeredAt;
 
         return $this;
     }
