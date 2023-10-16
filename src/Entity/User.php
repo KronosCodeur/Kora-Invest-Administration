@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Cassandra\Date;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -67,6 +69,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'contributor', targetEntity: Contribution::class, orphanRemoval: true)]
     private Collection $contributions;
+
+    #[ORM\Column]
+    private int $initialCode ;
+
+    #[ORM\Column]
+    private string $registeredAt;
 
     public function __construct()
     {
@@ -303,6 +311,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $contribution->setContributor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInitialCode(): int
+    {
+        return $this->initialCode;
+    }
+
+    public function setInitialCode(int $initialCode): static
+    {
+        $this->initialCode = $initialCode;
+
+        return $this;
+    }
+
+    public function getRegisteredAt(): string
+    {
+        return $this->registredAt;
+    }
+
+    public function setRegisteredAt(string $registredAt): static
+    {
+        $this->registredAt = $registredAt;
 
         return $this;
     }
