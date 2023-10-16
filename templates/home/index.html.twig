@@ -1,31 +1,106 @@
 {% extends 'dashboard_base.html.twig' %}
 
 {% block title %}Kora Invest Admin - Home{% endblock %}
+{% block style %}
+    <style>
+        .cardOne{
+            width: 20rem;
+            background-color: #DB4437;
+            transition-duration: 0.5s;
+        }
+        .cardOne:hover{
+            box-shadow: 10px 20px 20px rgb(219, 68, 55,0.6) !important;
+        }
+        .cardTwo{
+            width: 20rem;
+            background-color: #4285f4;
+            transition-duration: 0.5s;
+        }
+        .cardTwo:hover{
+            box-shadow: 10px 20px 20px rgba(66, 133, 244, 0.6) !important;
+        }
+        .cardThree{
+            width: 20rem;
+            background-color: #0f9d58;
+            transition-duration: 0.5s;
+        }
+        .cardThree:hover{
+            box-shadow: 10px 20px 20px rgba(15, 157, 88, 0.6) !important;
+        }
+        .cardFour{
+            width: 20rem;
+            background-color: #f4b400;
+            transition-duration: 0.5s;
+        }
+        .cardFour:hover{
+            box-shadow: 10px 20px 20px rgba(244, 180, 0, 0.6) !important;
+        }
+    </style>
+{% endblock %}
 {% block body %}
-<div class="w-100 h-auto p-1 d-flex justify-content-around align-items-start">
-    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
-        <div class="card-body">
-            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
-            <h1 class="card-text">{{ users }} Users</h1>
+    <div class="w-100 h-auto p-1 d-flex flex-row flex-wrap justify-content-around align-items-start">
+        <div class="card text-white  mb-3 text-center shadow cardOne" >
+            <div class="card-header">
+                <h3><strong>Daily Clients</strong></h3>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title"><i class="fas fa-users"></i> </h2>
+                <h2 class="card-text">{{ clients}} Users</h2>
+            </div>
+        </div>
+        <div class="card text-white  mb-3 text-center shadow cardTwo" >
+            <div class="card-header">
+                <h3><strong>Daily Contributions</strong></h3>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title"><i class="fas fa-hand-holding-dollar"></i> </h2>
+                <h2 class="card-text">{{ contributions | length }} &nbsp;<span class="fs-3">Contributions</span> </h2>
+            </div>
+        </div>
+        <div class="card text-white  mb-3 text-center shadow cardThree" >
+            <div class="card-header">
+                <h3><strong>Daily  Earn</strong></h3>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title"><i class="fas fa-dollar-sign"></i> </h2>
+                <h2 class="card-text">{{ users | length }} FCFA</h2>
+            </div>
+        </div>
+        <div class="card text-white  mb-3 text-center shadow cardFour" >
+            <div class="card-header">
+                <h3><strong>Actives Loans</strong></h3>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title"><i class="fas fa-hand-back-fist"></i> </h2>
+                <h2 class="card-text">{{ users | length }} Loans</h2>
+            </div>
         </div>
     </div>
-    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
-        <div class="card-body">
-            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
-            <h1 class="card-text">{{ users }} Transactions</h1>
-        </div>
+    <div class="table-responsive small">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Header</th>
+                <th scope="col">Header</th>
+                <th scope="col">Header</th>
+                <th scope="col">Header</th>
+                <th scope="col">Header</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.firstName }}&nbsp;{{ user.lastName }}</td>
+                <td><img class="rounded-0" src="{{ user.picture }}" alt="{{ user.userIdentifier }}" width="50" height="50"></td>
+                <td>{{ user.gender }}</td>
+                <td>{{ user.birthday }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.address }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
-        <div class="card-body">
-            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
-            <h1 class="card-text">{{ users }} Contributions</h1>
-        </div>
-    </div>
-    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
-        <div class="card-body">
-            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
-            <h1 class="card-text">{{ users }} Contributions</h1>
-        </div>
-    </div>
-</div>
+
 {% endblock %}
