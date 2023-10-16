@@ -1,7 +1,31 @@
 {% extends 'dashboard_base.html.twig' %}
 
 {% block title %}Kora Invest Admin - Home{% endblock %}
-
 {% block body %}
-
+<div class="w-100 h-auto p-1 d-flex justify-content-around align-items-start">
+    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
+        <div class="card-body">
+            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
+            <h1 class="card-text">{{ users }} Users</h1>
+        </div>
+    </div>
+    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
+        <div class="card-body">
+            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
+            <h1 class="card-text">{{ users }} Transactions</h1>
+        </div>
+    </div>
+    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
+        <div class="card-body">
+            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
+            <h1 class="card-text">{{ users }} Contributions</h1>
+        </div>
+    </div>
+    <div class="card text-white primaryBgColor mb-3 text-center shadow" style="max-width: 20rem;">
+        <div class="card-body">
+            <h1 class="card-title"><i class="fas fa-users"></i> </h1>
+            <h1 class="card-text">{{ users }} Contributions</h1>
+        </div>
+    </div>
+</div>
 {% endblock %}

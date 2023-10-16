@@ -29,6 +29,12 @@
         color: #ff6219;
         font-size: 20px;
     }
+    .primaryBgColor{
+        background-color: #ff6219;
+    }
+    .primaryTextColor{
+        color: #ff6219;
+    }
     *{
         font-family: Poppins,sans-serif;
     }
@@ -79,8 +85,10 @@
                 </div>
             </div>
         </nav>
-        <div class="bg-body-secondary  m-0 w-100" style="width: 100%; min-height: calc(100vh - 80px)">
-            {% block body %}{% endblock %}
+        <div class="bg-body-secondary p-3" style="width: 100%; min-height: calc(100vh - 80px );">
+            {% block body %}
+
+            {% endblock %}
         </div>
     </div>
 </body>
