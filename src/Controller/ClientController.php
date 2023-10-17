@@ -46,12 +46,9 @@ class ClientController extends AbstractController
         }else{
             $username = $request->get('username');
             if($userRepository->findOneBy(['username'=>$username])){
-                $countries = $this->countryRepository->findAll();
                 $cities = $this->cityRepository->findAll();
                 return $this->render('admin/add_admin.html.twig',[
-                    "countries"=>$countries,
                     "cities"=>$cities,
-                    "selected"=>$this->selectedCountry,
                     "error"=>"This username is already registered"
                 ]);
             }
