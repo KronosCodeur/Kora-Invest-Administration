@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Admin{% endblock %}
+{% block javascripts %}
+    <script>
+        let country_id = 1;
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action=" {{ path('admin.addAdmin') }}" method="post" enctype="multipart/form-data" class="mt-4  border-dark border-2 shadow bg-dark-subtle px-4 py-3 rounded-3 d-flex flex-wrap flex-column justify-content-center ">
+                    <div class="fw-semibold my-2 d-flex fs-2 flex-column align-items-center justify-content-center">New administrator<i class="fas fa-user-lock"></i></div>
+                    {% if error !=""%}
+                        <div class="alert alert-dismissible alert-danger">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <strong>Error : </strong>{{ error}}
+                        </div>
+                    {% endif %}
+                    <div class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-4 my-2">
+                        <div class="form-group col-5">
+                            <label for="firstName">Prénom</label>
+                            <input type="text" name="firstName" id="firstName" class="form-control" required="" placeholder="john">
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="lastName">Nom</label>
+                            <input type="text" name="lastName" id="lastName" class="form-control" required="" placeholder="DOE">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-4 my-2">
+                        <div class="form-group col-5">
+                            <label for="username">Nom d'utilisateur</label>
+                            <input type="text" name="username" id="username" class="form-control" required placeholder="exemple@live.com">
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="phone">Téléphone(without country code)</label>
+                            <input type="tel" name="phone" id="phone" class="form-control" required placeholder="22233344">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-4 my-2">
+                        <div class="form-group col-5">
+                            <label for="gender">Sexe</label>
+                            <select name="gender" id="gender" class="form-control" required>
+                                <option value="">Sélectionnez votre sexe</option>
+                                <option value="male">Homme</option>
+                                <option value="female">Femme</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="city">Ville</label>
+                            <select name="city" id="city" class="form-control" required>
+                                {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }} - {{ city.country.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-4 my-2">
+                        <div class="form-group col-5">
+                            <label for="picture">Photo de profil</label>
+                            <input type="file" name="picture" id="picture" class="form-control" required="">
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="address">Adresse</label>
+                            <input type="text" name="address" id="address" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-4 my-2">
+                        <div class="form-group col-5">
+                            <label for="birthday">Date de naissance</label>
+                            <input type="date" name="birthday" id="birthday" class="form-control" required>
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="registered">Date d'enregistrement</label>
+                            <input type="date" name="dateRegistration" id="registered" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex align-items-center gap-5 justify-content-center my-3">
+                        <a  href="{{ path('admin.index') }}" class="btn px-4 py-2 text-dark fw-bold bg-white border-2 border-dark">Return</a>
+                        <button type="submit" class="btn px-4 py-2 text-white fw-bold"  style="background-color: #DB4437">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

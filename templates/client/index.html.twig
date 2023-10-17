@@ -22,7 +22,6 @@
             </thead>
             <tbody>
             {% for client in clients %}
-                {% if is_granted(['ROLE_CLIENT'],client) %}
                 <tr class="text-center fw-semibold">
                     <td>{{ client.firstName }}&nbsp;{{ client.lastName }}</td>
                     <td><img class="rounded-0" src="{{ client.picture }}" alt="{{ client.firstName }}" width="50"
@@ -34,7 +33,6 @@
                     <td>{% if client.active %} <i class="fas fa-circle text-success"></i>{% else %}<i
                                 class="fas fa-circle text-danger"></i>{% endif %}</td>
                 </tr>
-                {% endif %}
             {% endfor %}
             </tbody>
         </table>
