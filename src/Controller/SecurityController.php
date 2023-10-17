@@ -27,35 +27,46 @@ class SecurityController extends AbstractController
         // nothing to do here
     }
 
-
-    #[Route('/admin/register', name: 'security.register', methods: ['GET','POST'])]
+    #[Route('/register', name: 'security.register', methods: ['GET','POST'])]
     public function adminRegister(Request $request, UserRepository $userRepository,EntityManagerInterface $entityManager): Response
     {
-        $username = $request->get('username');
-        $password = $request->get('password');
-        $initialCode = $request->files->get('initialCode');
-       $user =  $userRepository->findOneBy(['username'=>$username]);
-       if(!$user){
-           return $this->render("security/register.html.twig",
-           [
-               "error"=>"admin not found, you must be registered by a super administrator"
-           ]);
-       }elseif ($user->isActive()){
-           return $this->render("security/register.html.twig",
-               [
-                   "error"=>"This account is already activated"
-               ]);
-       }elseif ($user->getInitialCode()!=$initialCode){
-           return $this->render("security/register.html.twig",
-               [
-                   "error"=>"invalid account activation code"
-               ]);
-       }
+        if($request->isMethod('GET')){
+            return  $this->render("security/register.html.twig",[
+                "error"=>""
+            ]);
+        }else{
+            $username = $request->get('username');
+            $password = $request->get('password');
+            $confPassword = $request->get('confPassword');
+            $initialCode = $request->get('code');
+            $user =  $userRepository->findOneBy(['username'=>$username]);
+            if($password!=$confPassword){
+                return $this->render("security/register.html.twig",
+                    [
+                        "error"=>"both password must be the same."
+                    ]);
+            } else if(!$user){
+                return $this->render("security/register.html.twig",
+                    [
+                        "error"=>"admin not found, you must be registered by a super administrator"
+                    ]);
+            }elseif ($user->isActive()){
+                return $this->render("security/register.html.twig",
+                    [
+                        "error"=>"This account is already activated"
+                    ]);
+            }elseif (strval($user->getInitialCode())!=$initialCode){
+                return $this->render("security/register.html.twig",
+                    [
+                        "error"=>"invalid account activation code".strval($user->getInitialCode()).$initialCode
+                    ]);
+            }
             $user->setPlainPassword($password);
             $user->setActive(true);
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->redirectToRoute('security.login');
-    }
+        }
+        }
 }
 
