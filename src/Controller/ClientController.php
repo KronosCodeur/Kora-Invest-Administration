@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\CityRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -15,13 +16,15 @@ class ClientController extends AbstractController
 {
     /**
      * @param UserRepository $userRepository
+     * @param CityRepository $cityRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, CityRepository $cityRepository)
     {
         $this->userRepository = $userRepository;
+        $this->cityRepository = $cityRepository;
     }
 
-    #[Route('/admin/clients', name: 'clients.index')]
+    #[Route('/admin/clients', name: 'client.index')]
     public function index(): Response
     {
         $clients = $this->userRepository->findAll();
@@ -32,13 +35,27 @@ class ClientController extends AbstractController
     private UserRepository $userRepository;
 
     #[Route('/admin/clients/addClient', name: 'client.addClient', methods: ["GET",'POST'])]
-    public function addClient(Request $request, EntityManagerInterface $entityManager): Response
+    public function addAdmin(Request $request,UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         if($request->isMethod("GET")){
-            return $this->render('client/add_client.html.twig');
+            $cities = $this->cityRepository->findAll();
+            return $this->render('client/add_client.html.twig',[
+                "cities"=>$cities,
+                "error"=>""
+            ]);
         }else{
-            $firstName = $request->get('firstName');
             $username = $request->get('username');
+            if($userRepository->findOneBy(['username'=>$username])){
+                $countries = $this->countryRepository->findAll();
+                $cities = $this->cityRepository->findAll();
+                return $this->render('admin/add_admin.html.twig',[
+                    "countries"=>$countries,
+                    "cities"=>$cities,
+                    "selected"=>$this->selectedCountry,
+                    "error"=>"This username is already registered"
+                ]);
+            }
+            $firstName = $request->get('firstName');
             $lastName = $request->get('lastName');
             $registeredAt = $request->get('dateRegistration');
             $phone = $request->get('phone');
@@ -50,7 +67,7 @@ class ClientController extends AbstractController
                 $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = $originalFilename . '-' . uniqid() . '.' . $picture->guessExtension();
                 $picture->move(
-                    $this->getParameter('images_directory') . '/users/clients/profiles',
+                    $this->getParameter('images_directory') . '/users/admins/profiles',
                     $newFilename
                 );
             }
@@ -75,7 +92,9 @@ class ClientController extends AbstractController
             $user->setGender($gender);
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('clients.index');
+            return $this->redirectToRoute('client.index');
         }
     }
+    private  CityRepository $cityRepository;
+
 }
