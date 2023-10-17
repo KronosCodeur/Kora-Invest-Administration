@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +21,6 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/register', name: 'security.register')]
-    public function register(): Response
-    {
-        return $this->render('security/client_register.html.twig');
-    }
-
     #[Route('/logout', name: 'security.logout')]
     public function logout()
     {
@@ -34,41 +28,34 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route('/admin/register', name: 'security.adminRegister', methods: ['POST'])]
-    public function adminRegister(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/admin/register', name: 'security.register', methods: ['GET','POST'])]
+    public function adminRegister(Request $request, UserRepository $userRepository,EntityManagerInterface $entityManager): Response
     {
-        $firstName = $request->get('firstName');
         $username = $request->get('username');
-        $lastName = $request->get('lastName');
         $password = $request->get('password');
-        $phone = $request->get('phone');
-        $gender = $request->get('gender');
-        $picture = $request->files->get('picture');
-        $address = $request->get('address');
-        $birthday = $request->get('birthday');
-        if ($picture) {
-            $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFilename = $originalFilename . '-' . uniqid() . '.' . $picture->guessExtension();
-            $picture->move(
-                $this->getParameter('images_directory') . '/users/profiles',
-                $newFilename
-            );
-        }
-        $user = new  User();
-        $user->setUsername($username);
-        $user->setFirstName($firstName);
-        $user->setLastName($lastName);
-        $user->setPlainPassword($password);
-        $user->setActive(true);
-        $user->setBirthday($birthday);
-        $user->setAddress($address);
-        $user->setPhone($phone);
-        $user->setPicture("/pictures/users/profiles/" . $newFilename);
-        $user->setRoles(["ROLE_CLIENT"]);
-        $user->setGender($gender);
-        $entityManager->persist($user);
-        $entityManager->flush();
-        return $this->redirectToRoute('home.index');
+        $initialCode = $request->files->get('initialCode');
+       $user =  $userRepository->findOneBy(['username'=>$username]);
+       if(!$user){
+           return $this->render("security/register.html.twig",
+           [
+               "error"=>"admin not found, you must be registered by a super administrator"
+           ]);
+       }elseif ($user->isActive()){
+           return $this->render("security/register.html.twig",
+               [
+                   "error"=>"This account is already activated"
+               ]);
+       }elseif ($user->getInitialCode()!=$initialCode){
+           return $this->render("security/register.html.twig",
+               [
+                   "error"=>"invalid account activation code"
+               ]);
+       }
+            $user->setPlainPassword($password);
+            $user->setActive(true);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('security.login');
     }
 }
 

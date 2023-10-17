@@ -1,6 +1,6 @@
 {% extends 'auth_base.html.twig' %}
 
-{% block title %}Kora Invest Admin - Connexion{% endblock %}
+{% block title %}Kora Invest Admin - Register{% endblock %}
 
 {% block body %}
     <section class="vh-100" style="background-color: #768fe0;">
@@ -26,10 +26,10 @@
                                         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
 
                                         {% if error %}
-                                        <div class="alert alert-dismissible alert-danger">
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                            <strong>Error : </strong>{{ error.message}}
-                                        </div>
+                                            <div class="alert alert-dismissible alert-danger">
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                <strong>Error : </strong>{{ error.message}}
+                                            </div>
                                         {% endif %}
 
                                         <div class="form-outline mb-4">
