@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,6 +63,10 @@ class SecurityController extends AbstractController
                     ]);
             }
             $user->setPlainPassword($password);
+            try {
+                $user->setInitialCode(random_int(100000, 999999));
+            } catch (Exception $e) {
+            }
             $user->setActive(true);
             $entityManager->persist($user);
             $entityManager->flush();
