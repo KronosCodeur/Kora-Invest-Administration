@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SettingsController extends AbstractController
 {
-    #[Route('/admin/settings', name: 'settings.index')]
+    #[Route('/superAdmin/settings', name: 'settings.index')]
     public function index(): Response
     {
         return $this->render('settings/index.html.twig', [
