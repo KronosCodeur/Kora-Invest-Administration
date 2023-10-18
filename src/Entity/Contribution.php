@@ -22,7 +22,7 @@ class Contribution
     private ?int $amount = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $makedAt = null;
+    private ?string $makedAt = null;
 
     public function getId(): ?int
     {
@@ -53,12 +53,12 @@ class Contribution
         return $this;
     }
 
-    public function getMakedAt(): ?DateTimeImmutable
+    public function getMakedAt(): ?string
     {
         return $this->makedAt;
     }
 
-    public function setMakedAt(DateTimeImmutable $makedAt): static
+    public function setMakedAt(string $makedAt): static
     {
         $this->makedAt = $makedAt;
 

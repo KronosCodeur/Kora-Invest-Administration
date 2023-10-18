@@ -79,10 +79,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?City $city = null;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Investment::class, orphanRemoval: true)]
+    private Collection $investments;
+
     public function __construct()
     {
         $this->accounts = new ArrayCollection();
         $this->contributions = new ArrayCollection();
+        $this->investments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -362,6 +366,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCity(?City $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Investment>
+     */
+    public function getInvestments(): Collection
+    {
+        return $this->investments;
+    }
+
+    public function addInvestment(Investment $investment): static
+    {
+        if (!$this->investments->contains($investment)) {
+            $this->investments->add($investment);
+            $investment->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvestment(Investment $investment): static
+    {
+        if ($this->investments->removeElement($investment)) {
+            // set the owning side to null (unless already changed)
+            if ($investment->getOwner() === $this) {
+                $investment->setOwner(null);
+            }
+        }
 
         return $this;
     }

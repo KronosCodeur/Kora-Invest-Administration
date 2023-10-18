@@ -29,7 +29,7 @@ class Transaction
     private ?float $fees = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $makedAt = null;
+    private ?string $makedAt = null;
 
     public function getId(): ?int
     {
@@ -84,12 +84,12 @@ class Transaction
         return $this;
     }
 
-    public function getMakedAt(): ?DateTimeImmutable
+    public function getMakedAt(): ?string
     {
         return $this->makedAt;
     }
 
-    public function setMakedAt(DateTimeImmutable $makedAt): static
+    public function setMakedAt(string $makedAt): static
     {
         $this->makedAt = $makedAt;
 

@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Transaction;
 use App\Entity\User;
 use App\Repository\CityRepository;
+use App\Repository\InvestmentRepository;
+use App\Repository\TransactionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -30,14 +33,6 @@ class ClientController extends AbstractController
         $clients = $this->userRepository->findAll();
         return $this->render('client/index.html.twig', [
             'clients' => $clients,
-        ]);
-    }
-    #[Route('/admin/clients/{id}', name: 'client.details',methods: ['GET'])]
-    public function clientDetails(int $id): Response
-    {
-        $client = $this->userRepository->findOneBy(['id'=>$id]);
-        return $this->render('client/client_details.html.twig', [
-            'client' => $client,
         ]);
     }
     private UserRepository $userRepository;
@@ -101,5 +96,20 @@ class ClientController extends AbstractController
         }
     }
     private  CityRepository $cityRepository;
-
+    #[Route('/admin/clients/{id}', name: 'client.details',methods: ['GET'])]
+    public function clientDetails( $id,TransactionRepository $transactionRepository,UserRepository $userRepository): Response
+    {
+        $client = $userRepository->findOneBy(['id'=>$id]);
+        $transacs = $transactionRepository->findAll();
+        $userTransactions = [];
+        foreach ($transacs as $transac) {
+            if($transac->getAccount()->getOwner() == $client){
+                $userTransactions[] =$transac;
+            }
+        }
+        return $this->render('client/client_details.html.twig', [
+            'client' => $client,
+            "clientTransactions"=>$userTransactions
+        ]);
+    }
 }

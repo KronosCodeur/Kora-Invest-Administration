@@ -39,6 +39,10 @@ class Investment
     #[ORM\Column]
     private ?bool $status = null;
 
+    #[ORM\ManyToOne(inversedBy: 'investments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
 
     public function getId(): ?int
     {
@@ -137,6 +141,18 @@ class Investment
     public function setStatus(bool $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }
