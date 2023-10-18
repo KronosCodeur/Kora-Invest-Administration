@@ -2,9 +2,7 @@
 
 {% block title %}Add New Admin{% endblock %}
 {% block javascripts %}
-    <script>
-        let country_id = 1;
-    </script>
+
 {% endblock %}
 {% block body %}
     <div class="container">
@@ -51,7 +49,7 @@
                             <label for="city">Ville</label>
                             <select name="city" id="city" class="form-control" required>
                                 {% for city in cities %}
-                                <option value="{{ city.id }}">{{ city.name }} - {{ city.country.name }}</option>
+                                    <option value="{{ city.id }}">{{ city.name }} - {{ city.country.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
