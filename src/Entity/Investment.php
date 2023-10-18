@@ -23,17 +23,21 @@ class Investment
     #[ORM\Column]
     private ?bool $blocked = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[ORM\Column]
+    private ?string $makedAt = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $makedAt = null;
-
-    #[ORM\Column]
-    private ?DateTimeImmutable $availableAt = null;
+    private ?string $availableAt = null;
 
     #[ORM\Column]
     private ?int $return = null;
+
+    #[ORM\ManyToOne(inversedBy: 'investments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?InvestmentType $type = null;
+
+    #[ORM\Column]
+    private ?bool $status = null;
 
 
     public function getId(): ?int
@@ -77,36 +81,24 @@ class Investment
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getMakedAt(): ?DateTimeImmutable
+    public function getMakedAt(): ?string
     {
         return $this->makedAt;
     }
 
-    public function setMakedAt(DateTimeImmutable $makedAt): static
+    public function setMakedAt(string $makedAt): static
     {
         $this->makedAt = $makedAt;
 
         return $this;
     }
 
-    public function getAvailableAt(): ?DateTimeImmutable
+    public function getAvailableAt(): ?string
     {
         return $this->availableAt;
     }
 
-    public function setAvailableAt(DateTimeImmutable $availableAt): static
+    public function setAvailableAt(string $availableAt): static
     {
         $this->availableAt = $availableAt;
 
@@ -121,6 +113,30 @@ class Investment
     public function setReturn(int $return): static
     {
         $this->return = $return;
+
+        return $this;
+    }
+
+    public function getType(): ?InvestmentType
+    {
+        return $this->type;
+    }
+
+    public function setType(?InvestmentType $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function isStatus(): ?bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
