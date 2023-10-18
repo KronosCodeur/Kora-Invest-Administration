@@ -32,6 +32,14 @@ class ClientController extends AbstractController
             'clients' => $clients,
         ]);
     }
+    #[Route('/admin/clients/{id}', name: 'client.details')]
+    public function clientDetails(int $id): Response
+    {
+        $client = $this->userRepository->findOneBy(['id'=>$id]);
+        return $this->render('client/client_details.html.twig', [
+            'client' => $client,
+        ]);
+    }
     private UserRepository $userRepository;
 
     #[Route('/admin/clients/addClient', name: 'client.addClient', methods: ["GET",'POST'])]

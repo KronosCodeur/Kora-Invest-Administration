@@ -73,6 +73,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $registeredAt;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Country $country = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?City $city = null;
+
     public function __construct()
     {
         $this->accounts = new ArrayCollection();
@@ -332,6 +338,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRegisteredAt(string $registeredAt): static
     {
         $this->registeredAt = $registeredAt;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): static
+    {
+        $this->city = $city;
 
         return $this;
     }
