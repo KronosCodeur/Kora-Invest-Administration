@@ -20,8 +20,6 @@ class Account
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
 
     #[ORM\Column(length: 255)]
     private ?string $number = null;
@@ -30,13 +28,16 @@ class Account
     private ?bool $active = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $createdAt = null;
+    private ?string $createdAt = null;
 
     #[ORM\Column]
     private ?float $solde = null;
 
     #[ORM\OneToMany(mappedBy: 'account', targetEntity: Transaction::class, orphanRemoval: true)]
     private Collection $transactions;
+
+    #[ORM\ManyToOne(inversedBy: 'accounts')]
+    private ?AccountType $type = null;
 
 
     public function __construct()
@@ -57,18 +58,6 @@ class Account
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
 
         return $this;
     }
@@ -97,12 +86,12 @@ class Account
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?string
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
+    public function setCreatedAt(string $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -147,6 +136,18 @@ class Account
                 $transaction->setAccount(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?AccountType
+    {
+        return $this->type;
+    }
+
+    public function setType(?AccountType $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
