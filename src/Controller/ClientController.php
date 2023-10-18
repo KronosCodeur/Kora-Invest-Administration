@@ -32,7 +32,7 @@ class ClientController extends AbstractController
             'clients' => $clients,
         ]);
     }
-    #[Route('/admin/clients/{id}', name: 'client.details')]
+    #[Route('/admin/clients/{id}', name: 'client.details',methods: ['GET'])]
     public function clientDetails(int $id): Response
     {
         $client = $this->userRepository->findOneBy(['id'=>$id]);

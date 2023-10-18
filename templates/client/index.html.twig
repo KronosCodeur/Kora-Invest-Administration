@@ -25,7 +25,7 @@
             <tbody>
             {% for client in clients %}
                 <tr class="text-center fw-semibold">
-                    <td><a class="text-black fw-semibold" href="/admin/clients/{{ client.id }}">{{ client.firstName }}&nbsp;{{ client.lastName }}</a></td>
+                    <td><a class="text-black fw-semibold" href="{{ path('client.details', {'id': client.id}) }}">{{ client.firstName }}&nbsp;{{ client.lastName }}</a></td>
                     <td><img class="rounded-0" src="{{ client.picture }}" alt="{{ client.firstName }}" width="50"
                              height="50"></td>
                     <td>{{ client.gender }}</td>
