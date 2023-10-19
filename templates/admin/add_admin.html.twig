@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <form action=" {{ path('admin.addAdmin') }}" method="post" enctype="multipart/form-data" class="mt-4  border-dark border-2 shadow bg-dark-subtle px-4 py-3 rounded-3 d-flex flex-wrap flex-column justify-content-center ">
+                <form action="{{ path('admin.addAdmin') }}" method="post" enctype="multipart/form-data" class="mt-4  border-dark border-2 shadow bg-dark-subtle px-4 py-3 rounded-3 d-flex flex-wrap flex-column justify-content-center ">
                     <div class="fw-semibold my-2 d-flex fs-2 flex-column align-items-center justify-content-center">New administrator<i class="fas fa-user-lock"></i></div>
                     {% if error !=""%}
                         <div class="alert alert-dismissible alert-danger">

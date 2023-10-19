@@ -10,6 +10,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
@@ -30,8 +31,22 @@ class AdminController extends AbstractController
     public function index(): Response
     {
         $users = $this->userRepository->findAll();
+        $admins = [];
+        $removedAdmins = [];
+        $superAdmins = [];
+        foreach ($users as $user) {
+            if($user->getRoles()==["ROLE_ADMIN"]){
+                $admins[] =$user;
+            }elseif ($user->getRoles()==["ROLE_SUPER_ADMIN"]){
+                $superAdmins[] = $user;
+            }elseif ($user->getRoles()==["ROLE_REMOVED"]){
+                $removedAdmins[] = $user;
+            }
+        }
         return $this->render('admin/index.html.twig', [
-            'admins' => $users,
+            'admins' => $admins,
+            'superAdmins' => $superAdmins,
+            'removedAdmins' => $removedAdmins,
         ]);
     }
     private  UserRepository $userRepository;
@@ -60,7 +75,7 @@ class AdminController extends AbstractController
             $phone = $request->get('phone');
             $gender = $request->get('gender');
             $city_id = $request->get('city');
-            $city = $this->userRepository->findOneBy(['id'=>$city_id]);
+            $city = $this->cityRepository->findOneBy(['id'=>$city_id]);
             $picture = $request->files->get('picture');
             $address = $request->get('address');
             $birthday = $request->get('birthday');
@@ -97,6 +112,51 @@ class AdminController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('admin.index');
         }
+    }
+
+    #[Route("/superAdmin/addSuperAdmin{id}",name: "admin.addSuperAdmin",methods: ["GET"])]
+    public function makeSuperAdmin($id,UserRepository $userRepository,EntityManagerInterface $entityManager)
+    {
+        $user = $userRepository->findOneBy(['id'=>$id]);
+        $user->setRoles(["ROLE_SUPER_ADMIN"]);
+        $user->setPlainPassword(null);
+        $user->setActive(false);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return $this->redirectToRoute("admin.index");
+    }
+    #[Route("/superAdmin/removeSuperAdmin/{id}",name: "admin.removeSuperAdmin",methods: ["GET"])]
+    public function removeSuperAdmin($id,UserRepository $userRepository,EntityManagerInterface $entityManager)
+    {
+        $user = $userRepository->findOneBy(['id'=>$id]);
+        $user->setRoles(["ROLE_ADMIN"]);
+        $entityManager->persist($user);
+        $user->setPlainPassword(null);
+        $user->setActive(false);
+        $entityManager->flush();
+        return $this->redirectToRoute("admin.index");
+    }
+    #[Route("/superAdmin/removeAdmin/{id}",name: "admin.removeAdmin",methods: ["GET"])]
+    public function removeAdmin($id,UserRepository $userRepository,EntityManagerInterface $entityManager)
+    {
+        $user = $userRepository->findOneBy(['id'=>$id]);
+        $user->setRoles(["ROLE_REMOVED"]);
+        $user->setPlainPassword(null);
+        $user->setActive(false);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return $this->redirectToRoute("admin.index");
+    }
+    #[Route("/superAdmin/returnAdmin/{id}",name: "admin.returnAdmin",methods: ["GET"])]
+    public function returnAdmin($id,UserRepository $userRepository,EntityManagerInterface $entityManager)
+    {
+        $user = $userRepository->findOneBy(['id'=>$id]);
+        $user->setRoles(["ROLE_ADMIN"]);
+        $user->setPlainPassword(null);
+        $user->setActive(false);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return $this->redirectToRoute("admin.index");
     }
     private  CityRepository $cityRepository;
 }

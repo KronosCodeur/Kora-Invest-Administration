@@ -4,20 +4,25 @@
 {% endblock %}
 {% block body %}
     <div class="d-flex flex-wrap flex-row justify-content-between px-3 py-2">
-        <h2>Admins Lists</h2>
+        <h2>Administrator Lists</h2>
         <a href="{{ path('admin.addAdmin') }}" class="py-2 px-3 bg-success text-white fw-semibold text-decoration-none rounded-pill shadow"><i class="fas fa-user-plus"></i> New Admin</a>
     </div>
+<div class="w-100 overflow-scroll mb-3" style="max-height: 50%">
+    <p class="fw-semibold fs-4 ">Panel Administrators List</p>
     <div class="table-responsive-md">
         <table class="table table-striped table-sm border-1 border-dark rounded-2">
             <thead>
-            <tr>
-                <th scope="col">FullName</th>
-                <th scope="col">Profile</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Birthday</th>
-                <th scope="col">Phone</th>
-                <th scope="col">address</th>
-                <th scope="col">active</th>
+            <tr class="text-center">
+                <th scope="col" class="col-2">FullName</th>
+                <th scope="col" class="col-1">Profile</th>
+                <th scope="col" class="col-2">Identifier</th>
+                <th scope="col" class="col-1">Gender</th>
+                <th scope="col" class="col-1">Birthday</th>
+                <th scope="col"class="col-1">Phone</th>
+                <th scope="col" class="col-2">Address</th>
+                <th scope="col" class="col-1">Active</th>
+                <th scope="col" class="col-1">Remove Access</th>
+                <th scope="col" class="col-1">Upgrade Access</th>
             </tr>
             </thead>
             <tbody>
@@ -26,15 +31,93 @@
                     <td>{{ admin.firstName }}&nbsp;{{ admin.lastName }}</td>
                     <td><img class="rounded-0" src="{{ admin.picture }}" alt="{{ admin.firstName }}" width="50"
                              height="50"></td>
+                    <td>{{ admin.username }}</td>
                     <td>{{ admin.gender }}</td>
                     <td>{{ admin.birthday }}</td>
                     <td>{{ admin.phone }}</td>
-                    <td>{{ admin.address }}</td>
+                    <td>{{ admin.address }}, {{ admin.city.name }} - {{ admin.country.name }}</td>
                     <td>{% if admin.active %} <i class="fas fa-circle text-success"></i>{% else %}<i
                                 class="fas fa-circle text-danger"></i>{% endif %}</td>
+                    <td><a href="{{ path('admin.removeAdmin', {'id': admin.id}) }}" class="text-decoration-none" style="color: #DB4437"><i class="fa fa-trash"></i> </a> </td>
+                    <td><a href="{{ path('admin.addSuperAdmin', {'id': admin.id}) }}" class="text-decoration-none" style="color: #0f9d58 "><i class="fa fa-arrow-circle-up"></i> </a> </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+</div>
+<div class="w-100 overflow-scroll mb-3" style="max-height: 25%">
+    <p class="fw-semibold fs-4 ">Panel Super Administrators List</p>
+    <div class="table-responsive-md">
+        <table class="table table-striped table-sm border-1 border-dark rounded-2">
+            <thead>
+            <tr class="text-center">
+                <th scope="col" class="col-2">FullName</th>
+                <th scope="col" class="col-1">Profile</th>
+                <th scope="col" class="col-2">Identifier</th>
+                <th scope="col" class="col-1">Gender</th>
+                <th scope="col" class="col-1">Birthday</th>
+                <th scope="col"class="col-1">Phone</th>
+                <th scope="col" class="col-2">Address</th>
+                <th scope="col" class="col-1">Active</th>
+                <th scope="col" class="col-1">Downgrade Access</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for superAdmin in superAdmins %}
+                <tr class="text-center fw-semibold">
+                    <td>{{ superAdmin.firstName }}&nbsp;{{ superAdmin.lastName }}</td>
+                    <td><img class="rounded-0" src="{{ superAdmin.picture }}" alt="{{ superAdmin.firstName }}" width="50"
+                             height="50"></td>
+                    <td>{{ superAdmin.username }}</td>
+                    <td>{{ superAdmin.gender }}</td>
+                    <td>{{ superAdmin.birthday }}</td>
+                    <td>{{ superAdmin.phone }}</td>
+                    <td>{{ superAdmin.address }}, {{ superAdmin.city.name }} - {{ superAdmin.country.name }}</td>
+                    <td>{% if superAdmin.active %} <i class="fas fa-circle text-success"></i>{% else %}<i
+                                class="fas fa-circle text-danger"></i>{% endif %}</td>
+                    <td><a href="{{ path('admin.removeSuperAdmin', {'id': superAdmin.id}) }}" class="text-decoration-none" style="color: #DB4437"><i class="fa fa-arrow-circle-down"></i> </a> </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="w-100 overflow-scroll mb-3" style="max-height: 25%">
+    <p class="fw-semibold fs-4 ">Administrator with Access Removed</p>
+    <div class="table-responsive-md">
+        <table class="table table-striped table-sm border-1 border-dark rounded-2">
+            <thead>
+            <tr class="text-center">
+                <th scope="col" class="col-2">FullName</th>
+                <th scope="col" class="col-1">Profile</th>
+                <th scope="col" class="col-2">Identifier</th>
+                <th scope="col" class="col-1">Gender</th>
+                <th scope="col" class="col-1">Birthday</th>
+                <th scope="col"class="col-1">Phone</th>
+                <th scope="col" class="col-2">Address</th>
+                <th scope="col" class="col-1">Active</th>
+                <th scope="col" class="col-1">Return Access</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for removedAdmin in removedAdmins %}
+                <tr class="text-center fw-semibold">
+                    <td>{{ removedAdmin.firstName }}&nbsp;{{ removedAdmin.lastName }}</td>
+                    <td><img class="rounded-0" src="{{ removedAdmin.picture }}" alt="{{ removedAdmin.firstName }}" width="50"
+                             height="50"></td>
+                    <td>{{ removedAdmin.username }}</td>
+                    <td>{{ removedAdmin.gender }}</td>
+                    <td>{{ removedAdmin.birthday }}</td>
+                    <td>{{ removedAdmin.phone }}</td>
+                    <td>{{ removedAdmin.address }}, {{ removedAdmin.city.name }} - {{ removedAdmin.country.name }}</td>
+                    <td>{% if removedAdmin.active %} <i class="fas fa-circle text-success"></i>{% else %}<i
+                                class="fas fa-circle text-danger"></i>{% endif %}</td>
+                    <td><a href="{{ path('admin.returnAdmin', {'id': removedAdmin.id}) }}" class="text-decoration-none" style="color: #0f9d58 "><i class="fa fa-arrow-circle-up"></i> </a> </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
