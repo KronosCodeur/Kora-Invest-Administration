@@ -30,7 +30,13 @@ class ClientController extends AbstractController
     #[Route('/admin/clients', name: 'client.index')]
     public function index(): Response
     {
-        $clients = $this->userRepository->findAll();
+        $users = $this->userRepository->findAll();
+        $clients = [];
+        foreach ($users as $user) {
+            if($user->getRoles()==["ROLE_CLIENT"]){
+                $clients[] =$user;
+            }
+        }
         return $this->render('client/index.html.twig', [
             'clients' => $clients,
         ]);
@@ -60,6 +66,9 @@ class ClientController extends AbstractController
             $registeredAt = $request->get('dateRegistration');
             $phone = $request->get('phone');
             $gender = $request->get('gender');
+            $cityId = $request->get('city');
+            $city = $this->cityRepository->findOneBy(['id'=>$cityId]);
+            $country = $city->getCountry();
             $picture = $request->files->get('picture');
             $address = $request->get('address');
             $birthday = $request->get('birthday');
@@ -67,7 +76,7 @@ class ClientController extends AbstractController
                 $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = $originalFilename . '-' . uniqid() . '.' . $picture->guessExtension();
                 $picture->move(
-                    $this->getParameter('images_directory') . '/users/admins/profiles',
+                    $this->getParameter('images_directory') . '/users/clients/profiles',
                     $newFilename
                 );
             }
@@ -79,6 +88,8 @@ class ClientController extends AbstractController
             $user->setBirthday($birthday);
             $user->setPlainPassword(null);
             $user->setAddress($address);
+            $user->setCity($city);
+            $user->setCountry($country);
             $user->setRegisteredAt($registeredAt);
             $user->setPhone($phone);
             if (!empty($newFilename)) {

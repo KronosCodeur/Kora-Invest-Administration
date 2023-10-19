@@ -4,7 +4,7 @@
     <div class="d-flex flex-row flex-wrap justify-content-start align-items-start w-100 h-100 gap-5">
         <div class="d-flex flex-column col-3 justify-content-start h-100 bg-dark-subtle p-5 rounded-3 shadow">
             <img src="{{ client.picture }}" alt=""  class="rounded-2"  style="max-width: 95%; height: auto">
-            <ul class="nav">
+            <ul class="nav d-flex flex-column flex-nowrap">
             <li class="text-black text-capitalize text-start fs-5 my-2 fw-normal">FullName: <span class="fw-bold" >{{ client.firstName }} {{ client.lastName }}</span></li>
             <li class="text-black text-capitalize text-start fs-5 my-2 fw-normal">Identifier: <span class="fw-bold text-lowercase" >{{ client.userIdentifier }}</span></li>
             <li class="text-black text-capitalize text-start fs-5 my-2 fw-normal">Phone: <span class="fw-bold" >{{ client.phone }}</span></li>
