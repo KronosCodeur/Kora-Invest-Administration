@@ -23,7 +23,7 @@
                         <tr class="text-center text-capitalize">
                             <th scope="col">Number</th>
                             <th scope="col">Type</th>
-                            <th scope="col">Balance ( {{ client.country.currency }} )</th>
+                            <th scope="col">Balance ( {{ client.country.currency.code }} )</th>
                             <th scope="col">Created At</th>
                             <th scope="col">Status</th>
                         </tr>
@@ -35,7 +35,7 @@
                                 <td>{{ account.type.name }}</td>
                                 <td>{{ account.solde }}</td>
                                 <td>{{ account.createdAt}}</td>
-                                <td>{% if client.active %} <i class="fas fa-circle text-success"></i>{% else %}<i
+                                <td>{% if account.active %} <i class="fas fa-circle text-success"></i>{% else %}<i
                                             class="fas fa-circle text-danger"></i>{% endif %}</td>
                             </tr>
                         {% endfor %}
@@ -102,7 +102,7 @@
                             <th scope="col">Number</th>
                             <th scope="col">Type</th>
                             <th scope="col">Balance (KORA)</th>
-                            <th scope="col">Return (KORA)</th>
+                            <th scope="col">Return (Bol)</th>
                             <th scope="col">Created At</th>
                             <th scope="col">Available At</th>
                             <th scope="col">Status</th>

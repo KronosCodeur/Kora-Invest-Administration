@@ -1,20 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccountController!{% endblock %}
+{% block title %}Accounts{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="w-100 h-100 overflow-scroll mb-3">
+        <p class="fw-semibold fs-4 "> Accounts List</p>
+        <div class="table-responsive-md">
+            <table border="2px" class="table table-striped table-sm border-1 border-dark rounded-3">
+                <thead>
+                <tr class="text-center text-capitalize">
+                    <th scope="col">Number</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for account in accounts %}
+                    <tr class="text-center fw-semibold">
+                        <td>{{ account.number }}</td>
+                        <td>{{ account.type.name }}</td>
+                        <td>{{ account.solde }}</td>
+                        <td>{{ account.owner.firstName }} {{ account.owner.lastName }}</td>
+                        <td>{{ account.createdAt}}</td>
+                        <td>{% if account.active %} <i class="fas fa-circle text-success"></i>{% else %}<i
+                                    class="fas fa-circle text-danger"></i>{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Kronos Codeur/PhpstormProjects/Kora-Invest-Administration/src/Controller/AccountController.php'|file_link(0) }}">src/Controller/AccountController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Kronos Codeur/PhpstormProjects/Kora-Invest-Administration/templates/account/index.html.twig'|file_link(0) }}">templates/account/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}
