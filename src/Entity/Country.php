@@ -24,14 +24,16 @@ class Country
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $currency = null;
 
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: City::class, orphanRemoval: true)]
     private Collection $cities;
 
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: User::class)]
     private Collection $users;
+
+    #[ORM\ManyToOne(inversedBy: 'countries')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Currency $currency = null;
 
     public function __construct()
     {
@@ -80,17 +82,6 @@ class Country
         return $this;
     }
 
-    public function getCurrency(): ?string
-    {
-        return $this->currency;
-    }
-
-    public function setCurrency(string $currency): static
-    {
-        $this->currency = $currency;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, City>
@@ -148,6 +139,18 @@ class Country
                 $user->setCountry(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCurrency(): ?Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?Currency $currency): static
+    {
+        $this->currency = $currency;
 
         return $this;
     }
