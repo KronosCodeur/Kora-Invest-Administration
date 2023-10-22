@@ -31,6 +31,9 @@ class Transaction
     #[ORM\Column]
     private ?string $makedAt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $reference = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +95,18 @@ class Transaction
     public function setMakedAt(string $makedAt): static
     {
         $this->makedAt = $makedAt;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): static
+    {
+        $this->reference = $reference;
 
         return $this;
     }
