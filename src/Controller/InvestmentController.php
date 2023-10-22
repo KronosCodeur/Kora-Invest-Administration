@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class InvestmentController extends AbstractController
 {
-    #[Route('/investment', name: 'app_investment')]
+    #[Route('/admin/investment', name: 'investment.index')]
     public function index(): Response
     {
         return $this->render('investment/index.html.twig', [
