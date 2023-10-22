@@ -115,12 +115,12 @@ class ClientController extends AbstractController
         $userTransactions = [];
         foreach ($transacs as $transac) {
             if($transac->getAccount()->getOwner() == $client){
-                $userTransactions[] =$transac;
+                $userTransactions[] = $transac;
             }
         }
         return $this->render('client/client_details.html.twig', [
             'client' => $client,
-            "clientTransactions"=>$userTransactions
+            "clientTransactions"=>array_reverse($userTransactions)
         ]);
     }
 }
