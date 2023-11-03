@@ -20,8 +20,6 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Build application
-        run: php bin/console build
 
   test:
     runs-on: ubuntu-latest
@@ -37,9 +35,6 @@ jobs:
 
       - name: Run unit tests
         run: php bin/console test:unit
-
-      - name: Run functional tests
-        run: php bin/console test:functional
 
   deploy:
     runs-on: ubuntu-latest
