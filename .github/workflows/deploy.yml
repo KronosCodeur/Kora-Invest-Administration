@@ -40,13 +40,13 @@ jobs:
     steps:
       - name: Deploy application
         run: |
-          ssh 154.56.60.59 "cd var/www/html/korainvest.228lab.com && git pull origin develop"
-          ssh 154.56.60.59 "composer install --no-interaction --prefer-dist"
-          ssh 154.56.60.59 "php bin/console cache:clear"
-          ssh 154.56.60.59 "php bin/console assets:install --symlink"
-          ssh 154.56.60.59 "php bin/console doctrine:migrations:migrate --no-interaction"
-          ssh 154.56.60.59 "php bin/console server:start"
+          ssh root@154.56.60.59 "cd var/www/html/korainvest.228lab.com && git pull origin develop"
+          ssh root@154.56.60.59 "composer install --no-interaction --prefer-dist"
+          ssh root@154.56.60.59 "php bin/console cache:clear"
+          ssh root@154.56.60.59 "php bin/console assets:install --symlink"
+          ssh root@154.56.60.59 "php bin/console doctrine:migrations:migrate --no-interaction"
+          ssh root@154.56.60.59 "php bin/console server:start"
 
 env:
-  DEPLOY_SERVER:  154.56.60.59
+  DEPLOY_SERVER:  root@154.56.60.59
   DEPLOY_DIR:  var/www/html/korainvest.228lab.com
