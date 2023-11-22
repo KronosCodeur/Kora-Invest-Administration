@@ -2,17 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Transaction;
 use App\Entity\User;
 use App\Repository\CityRepository;
-use App\Repository\InvestmentRepository;
 use App\Repository\TransactionRepository;
 use App\Repository\UserRepository;
+use App\Utils\TokenGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ClientController extends AbstractController
@@ -20,11 +21,13 @@ class ClientController extends AbstractController
     /**
      * @param UserRepository $userRepository
      * @param CityRepository $cityRepository
+     * @param TokenGenerator $tokenGenerator
      */
-    public function __construct(UserRepository $userRepository, CityRepository $cityRepository)
+    public function __construct(UserRepository $userRepository, CityRepository $cityRepository, TokenGenerator $tokenGenerator)
     {
         $this->userRepository = $userRepository;
         $this->cityRepository = $cityRepository;
+        $this->tokenGenerator = $tokenGenerator;
     }
 
     #[Route('/admin/clients', name: 'client.index')]
@@ -42,6 +45,7 @@ class ClientController extends AbstractController
         ]);
     }
     private UserRepository $userRepository;
+    private  TokenGenerator $tokenGenerator;
 
     #[Route('/admin/clients/addClient', name: 'client.addClient', methods: ["GET",'POST'])]
     public function addAdmin(Request $request,UserRepository $userRepository, EntityManagerInterface $entityManager): Response
@@ -122,5 +126,79 @@ class ClientController extends AbstractController
             'client' => $client,
             "clientTransactions"=>array_reverse($userTransactions)
         ]);
+    }
+
+    #[Route('/api/activeClientAccount', name: 'client.activeAccount',methods: ['POST'])]
+    public function activateAccount(Request $request,UserRepository $userRepository, EntityManagerInterface $entityManager)
+    {
+        $data = json_decode( $request->getContent(),true);
+        $phone = $data['phone'];
+        $code = $data['code'];
+        $password = $data['password'];
+        $user = $userRepository->findOneBy(['phone'=>$phone,'initialCode'=>$code]);
+        if($user==null  && $user->getRoles() != ['ROLE_CLIENT']){
+            $jsonData = json_encode([
+                "success"=>false,
+                "message"=>"Utilisateur non trouvee"
+            ]);
+            return new JsonResponse($jsonData,Response::HTTP_NOT_FOUND,[],true);
+        }
+        $user->setPlainPassword($password);
+        $user->setUsername($phone);
+        try {
+            $user->setInitialCode(random_int(100000, 999999));
+        } catch (Exception $e) {
+        }
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $jsonData = json_encode([
+            "success"=>true,
+            "message"=>"Compte activee  avec success"
+        ]);
+        return new JsonResponse($jsonData,Response::HTTP_OK,[],true);
+    }
+    #[Route('/api/clientLogin', name: 'client.login',methods: ['POST'])]
+    public function clientLogin(Request $request,UserRepository $userRepository,EntityManagerInterface $entityManager, UserPasswordHasherInterface  $passwordHasher)
+    {
+        $data = json_decode( $request->getContent(),true);
+        $phone = $data['phone'];
+        $password = $data['password'];
+        $user = $userRepository->findOneBy(['username'=>$phone]);
+        if($user===null){
+            $jsonData = json_encode([
+                "success"=>false,
+                "message"=>"Utilisateur non trouvee"
+            ]);
+            return new JsonResponse($jsonData,Response::HTTP_NOT_FOUND,[],true);
+        }
+        $verify = $passwordHasher->isPasswordValid($user,$password);
+        if(!$verify){
+            $jsonData = json_encode([
+                "success"=>false,
+                "message"=>"Veuillez verifier  votre  mot de passe "
+            ]);
+            return new JsonResponse($jsonData,Response::HTTP_NOT_FOUND,[],true);
+        }
+        $accessToken =$this->tokenGenerator->generateToken($user);
+        $user->setToken($accessToken);
+        $user->setPlainPassword($password);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $jsonData = json_encode([
+            "success"=>true,
+            "message"=>"Bienvenue sur Kora Invest ".$user->getFirstName()." ".$user->getLastName(),
+            "accessToken"=>$user->getToken(),
+            "userInfo"=>[
+                "id"=>$user->getId(),
+                "userName"=>$user->getUsername(),
+                "name"=>$user->getLastName()." ".$user->getFirstName(),
+                "phone"=>$user->getPhone(),
+                "address"=>$user->getAddress(),
+                "birthday"=>$user->getBirthday(),
+                "picture"=>$user->getPicture(),
+                "gender"=>$user->getGender()=="male"?"Masculin":"Feminin",
+            ]
+        ]);
+        return new JsonResponse($jsonData,Response::HTTP_OK,[],true);
     }
 }
